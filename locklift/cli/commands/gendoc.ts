@@ -1,7 +1,7 @@
-const { Command, Option } = require('commander');
+import { Command, Option } from 'commander';
 
-const { loadConfig } = require('./../../config');
-const utils = require('./../utils');
+import { loadConfig } from './../../config';
+import * as utils from './../utils';
 
 const program = new Command();
 
@@ -50,4 +50,4 @@ program.name('gendoc')
   });
 
 
-module.exports = program;
+export default program;

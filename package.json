@@ -2,8 +2,8 @@
   "name": "locklift",
   "version": "1.6.0",
   "description": "Node JS framework for working with Everscale contracts, inspired by Truffle and Hardhat, helps you to build, test, run and maintain your smart contracts",
-  "main": "locklift/cli/index.js",
   "scripts": {
+    "build": "tsc",
     "everdev-setup": "everdev sol set --compiler 0.57.3 --linker 0.14.39",
     "local-node-docker": "everdev se set --port 8080 && everdev se reset",
     "local-node-metal": "evernode-se restart",
@@ -13,7 +13,38 @@
     "test": "npm run contract-build && npm run contract-test"
   },
   "bin": {
-    "locklift": "locklift/cli/index.js"
+    "locklift": "build/cli/index.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "types": "build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "build/index.d.ts"
+      ],
+      "config": [
+        "build/config/index.d.ts"
+      ],
+      "contract": [
+        "build/contract/index.d.ts"
+      ],
+      "factory": [
+        "build/factory/index.d.ts"
+      ],
+      "giver": [
+        "build/giver/index.d.ts"
+      ],
+      "ton": [
+        "build/ton/index.d.ts"
+      ],
+      "utils": [
+        "build/utils/index.d.ts"
+      ]
+    }
   },
   "repository": {
     "type": "git",
@@ -42,23 +73,29 @@
   },
   "homepage": "https://github.com/EverscaleGuild/locklift#readme",
   "dependencies": {
-    "@broxus/contracts": "^1.0.4",
-    "@eversdk/core": "^1.35.1",
-    "@eversdk/lib-node": "^1.35.1",
-    "bignumber.js": "^9.0.2",
     "commander": "^7.2.0",
-    "directory-tree": "^2.3.1",
-    "ejs": "^3.1.8",
-    "execa": "^5.1.1",
+    "@broxus/contracts": "^1.0.3",
+    "@tonclient/core": "^1.28.0",
+    "@tonclient/lib-node": "^1.28.0",
+    "bignumber.js": "^9.0.1",
+    "directory-tree": "^2.2.7",
+    "ejs": "^3.1.6",
+    "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "mocha": "^8.4.0",
     "superstruct": "^0.14.2",
     "tablemark": "^2.0.0",
     "ton-client-js": "^0.28.1",
-    "underscore": "^1.13.4"
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@everscale-actions/evernode-se": "^0.31.0",
-    "everdev": "^1.2.1"
+    "everdev": "^1.2.1",
+    "@types/ejs": "^3.1.1",
+    "@types/fs-extra": "^9.0.13",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.35",
+    "@types/underscore": "^1.11.4",
+    "typescript": "^4.7.2"
   }
 }

@@ -1,8 +1,6 @@
-const { Command } = require('commander');
-const fs = require('fs');
-
-const { loadConfig } = require('./../../config');
-const utils = require('./../utils');
+import { Command } from 'commander';
+import { loadConfig } from '../../config';
+import * as utils from '../utils';
 
 const program = new Command();
 
@@ -33,5 +31,4 @@ program
     process.exit(0);
   });
 
-
-module.exports = program;
+export default program;
