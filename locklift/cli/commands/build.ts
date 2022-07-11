@@ -1,11 +1,8 @@
-const { Command } = require('commander');
-const fs = require('fs');
-
-const { loadConfig } = require('./../../config');
-const utils = require('./../utils');
+import { Command } from 'commander';
+import { loadConfig } from '../../config';
+import * as utils from '../utils';
 
 const program = new Command();
-
 
 program
   .name('build')
@@ -28,10 +25,9 @@ program
 
     const status = builder.buildContracts();
 
-    if (status === false) process.exit(1);
+    if (!status) process.exit(1);
 
     process.exit(0);
   });
 
-
-module.exports = program;
+export default program;

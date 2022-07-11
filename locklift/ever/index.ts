@@ -1,23 +1,48 @@
-const BigNumber = require('bignumber.js');
+import BigNumber from 'bignumber.js';
+import { Locklift } from '../index';
+import { Contract } from '../contract';
+import {
+  TonClient as ESClient,
+  AbiContract,
+  KeyPair,
+  ParamsOfEncodeMessage,
+  ResultOfEncodeMessage,
+  ResultOfProcessMessage,
+} from '@eversdk/core';
+import { libNode } from '@eversdk/lib-node';
+ESClient.useBinaryLibrary(libNode);
 
-const { TonClient } = require("@eversdk/core");
-const { libNode } = require("@eversdk/lib-node");
-TonClient.useBinaryLibrary(libNode);
+export type CreateDeployMessageParams = {
+  contract: Contract;
+  constructorParams?: any;
+  initParams: any;
+  keyPair: KeyPair;
+}
 
+export type CreateRunMessageParams = {
+  contract: Contract;
+  method: string;
+  params: any;
+  keyPair: KeyPair;
+}
 
 /**
- * TON wrapper, using TonClient from TON labs SDK
+ * Ever wrapper, using ESClient from TON labs SDK
  */
-class Ton {
+export class Ever {
+  private locklift: Locklift;
+  zero_address: string;
+  client: ESClient;
+
   /**
    * Initialize TON wrapper. All the configuration for TonClient should be placed in config.networks[network].ton_client
    * @param locklift
    */
-  constructor(locklift) {
+  constructor(locklift: Locklift) {
     this.locklift = locklift;
 
-    this.client = new TonClient(this.locklift.config.networks[this.locklift.network].ton_client);
-    this.zero_address = '0:0000000000000000000000000000000000000000000000000000000000000000';
+    this.client = new ESClient(this.locklift.config.networks[this.locklift.network].ton_client);
+    this.zero_address = locklift.utils.zeroAddress;
   }
 
   async setup() {
@@ -31,10 +56,10 @@ class Ton {
    * @param keyPair Key pair to use
    * @returns {Promise<ResultOfEncodeMessage>}
    */
-  async createDeployMessage({ contract, constructorParams, initParams, keyPair }) {
+  async createDeployMessage({ contract, constructorParams, initParams, keyPair }: CreateDeployMessageParams) {
     const encodeParams = {
       abi: {
-        type: "Contract",
+        type: 'Contract',
         value: contract.abi,
       },
       deploy_set: {
@@ -50,7 +75,7 @@ class Ton {
       }
     };
 
-    return this.locklift.ton.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
+    return this.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
   }
 
   /**
@@ -59,7 +84,7 @@ class Ton {
    * @param keyPair Key pair to use
    * @returns {{signer: {keys: *, type: string}}}
    */
-  enrichMessageWithKeys(encodeParams, keyPair) {
+  enrichMessageWithKeys(encodeParams: any, keyPair: KeyPair): ParamsOfEncodeMessage {
     return keyPair === undefined ? encodeParams : {
       ...encodeParams,
       signer: {
@@ -77,7 +102,9 @@ class Ton {
    * @param keyPair Key pair to use
    * @returns {Promise<ResultOfEncodeMessage>}
    */
-  async createRunMessage({ contract, method, params, keyPair }) {
+  async createRunMessage(
+    { contract, method, params, keyPair }: CreateRunMessageParams
+  ): Promise<ResultOfEncodeMessage> {
     const encodeParams = {
       address: contract.address,
       abi: {
@@ -93,7 +120,7 @@ class Ton {
       }
     };
 
-    return this.locklift.ton.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
+    return this.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
   }
 
   /**
@@ -102,12 +129,12 @@ class Ton {
    * @param abi Contract's ABI, used to decode transaction
    * @returns {Promise<ResultOfProcessMessage>}
    */
-  async waitForRunTransaction({ message, abi }) {
+  async waitForRunTransaction(
+    { message, abi }: { message: { message: string }, abi: AbiContract }
+  ) {
     const {
       shard_block_id,
     } = await this
-      .locklift
-      .ton
       .client
       .processing
       .send_message({
@@ -116,8 +143,6 @@ class Ton {
       });
 
     return this
-      .locklift
-      .ton
       .client
       .processing
       .wait_for_transaction({
@@ -136,7 +161,7 @@ class Ton {
    * @param address Contract address
    * @returns {Promise<BigNumber>}
    */
-  async getBalance(address) {
+  async getBalance(address: string): Promise<BigNumber> {
     const {
       result: [{
         balance
@@ -157,7 +182,7 @@ class Ton {
    * @param address
    * @returns {Promise<{acc_type: *, acc_type_name: *}>}
    */
-  async getAccountType(address) {
+  async getAccountType(address: string): Promise<{ acc_type: string; acc_type_name: string }> {
     const {
       result: [{
         acc_type,
@@ -177,6 +202,3 @@ class Ton {
     }
   }
 }
-
-
-module.exports = Ton;

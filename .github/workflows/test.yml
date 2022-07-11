@@ -29,4 +29,5 @@ jobs:
     - run: npm install
     - run: npm run local-node-metal
     - run: npm run everdev-setup
+    - run: npm run build
     - run: npm test

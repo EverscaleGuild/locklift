@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const commander = require('commander');
-const {
+import fs from 'fs';
+import path from 'path';
+import commander from 'commander';
+import {
   object,
   string,
   defaulted,
@@ -9,12 +9,38 @@ const {
   any,
   integer,
   record
-} = require('superstruct');
+} from 'superstruct';
+import { TonClient }from '@eversdk/core';
+import { libNode }from '@eversdk/lib-node';
 
-const { TonClient } = require("@eversdk/core");
-const { libNode } = require("@eversdk/lib-node");
 TonClient.useBinaryLibrary(libNode);
 
+export interface LockliftConfig {
+  compiler: {
+    path: string;
+  };
+  linker: {
+    path: string;
+    lib?: string;
+  };
+  networks: Record<'local' | string, {
+    giver: {
+      address: string;
+      abi: Record<string, unknown>;
+      key: string;
+    };
+    keys: {
+      path: string;
+      phrase: string;
+      amount: number;
+    };
+    ton_client?: {
+      network: {
+        server_address: string;
+      };
+    };
+  }>;
+}
 
 const Compiler = object({
   path: defaulted(string(), () => '/usr/bin/solc-ton'),
@@ -46,7 +72,6 @@ const Network = object({
   keys: Keys,
 });
 
-
 const Config = object({
   compiler: Compiler,
   linker: Linker,
@@ -55,7 +80,7 @@ const Config = object({
 });
 
 
-async function loadConfig(configPath) {
+export async function loadConfig(configPath: string) {
   const resolvedConfigPath = path.resolve(process.cwd(), configPath);
 
   if (!fs.existsSync(resolvedConfigPath)) {
@@ -68,7 +93,7 @@ async function loadConfig(configPath) {
 
   // Ad hoc
   // Since superstruct not allows async default value, default mnemonic phrases are generated bellow
-  function genHexString(len) {
+  function genHexString(len: number): string {
     const str = Math.floor(Math.random() * Math.pow(16, len)).toString(16);
     return "0".repeat(len - str.length) + str;
   }
@@ -100,8 +125,3 @@ async function loadConfig(configPath) {
 
   return config;
 }
-
-
-module.exports = {
-  loadConfig,
-};
