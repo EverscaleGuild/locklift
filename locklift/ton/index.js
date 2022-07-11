@@ -1,7 +1,7 @@
 const BigNumber = require('bignumber.js');
 
-const { TonClient } = require("@tonclient/core");
-const { libNode } = require("@tonclient/lib-node");
+const { TonClient } = require("@eversdk/core");
+const { libNode } = require("@eversdk/lib-node");
 TonClient.useBinaryLibrary(libNode);
 
 
@@ -19,10 +19,10 @@ class Ton {
     this.client = new TonClient(this.locklift.config.networks[this.locklift.network].ton_client);
     this.zero_address = '0:0000000000000000000000000000000000000000000000000000000000000000';
   }
-  
+
   async setup() {
   }
-  
+
   /**
    * Creates deploy message for Contract instance, by using deploy_set section.
    * @param contract Contract instance
@@ -49,10 +49,10 @@ class Ton {
         type: 'None',
       }
     };
-  
+
     return this.locklift.ton.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
   }
-  
+
   /**
    * Adds signer section to encoded message params if keyPair presented
    * @param encodeParams Encode message params
@@ -68,7 +68,7 @@ class Ton {
       }
     };
   }
-  
+
   /**
    * Creates run message for Contract instance by using call_set section
    * @param contract Contract instance
@@ -92,10 +92,10 @@ class Ton {
         type: 'None',
       }
     };
-  
+
     return this.locklift.ton.client.abi.encode_message(this.enrichMessageWithKeys(encodeParams, keyPair));
   }
-  
+
   /**
    * Sends message to the network and waits till it's confirmed
    * @param message Message to send
@@ -114,7 +114,7 @@ class Ton {
         message: message.message,
         send_events: false,
       });
-  
+
     return this
       .locklift
       .ton
@@ -130,7 +130,7 @@ class Ton {
         },
       });
   }
-  
+
   /**
    * Gets balance for specific address. Raise an error if address not found
    * @param address Contract address
@@ -148,10 +148,10 @@ class Ton {
       },
       result: 'balance'
     });
-    
+
     return new BigNumber(balance);
   }
-  
+
   /**
    * Get account type for specific address. Raise an error if address not found
    * @param address
@@ -170,7 +170,7 @@ class Ton {
       },
       result: 'acc_type acc_type_name'
     });
-    
+
     return {
       acc_type,
       acc_type_name
