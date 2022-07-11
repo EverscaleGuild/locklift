@@ -1,0 +1,32 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ${{ matrix.platform.on }}
+    name: ${{ matrix.platform.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - { on: ubuntu-latest, name: linux }
+          - { on: macos-latest, name: macos }
+#          - { on: windows-latest, name: windows } https://github.com/EverscaleGuild/locklift/issues/2
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    - run: npm install
+    - run: npm run local-node-metal
+    - run: npm run everdev-setup
+    - run: npm test

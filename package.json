@@ -4,7 +4,13 @@
   "description": "Node JS framework for working with Everscale contracts, inspired by Truffle and Hardhat, helps you to build, test, run and maintain your smart contracts",
   "main": "locklift/cli/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "everdev-setup": "everdev sol set --compiler 0.57.3 --linker 0.14.39",
+    "local-node-docker": "everdev se set --port 8080 && everdev se reset",
+    "local-node-metal": "evernode-se restart",
+    "contract-build": "cd sample-project && node .. build --config locklift.config.js",
+    "contract-deploy": "cd sample-project && node .. run --config locklift.config.js --network local --script scripts/1-deploy-sample.js",
+    "contract-test": "cd sample-project && node .. test --config locklift.config.js --network local",
+    "test": "npm run contract-build && npm run contract-test"
   },
   "bin": {
     "locklift": "locklift/cli/index.js"
@@ -23,11 +29,11 @@
   ],
   "contributors": [
     {
-      "name" : "pavlovdog_",
-      "email" : "pavlovdog.moscow@gmail.com"
+      "name": "pavlovdog_",
+      "email": "pavlovdog.moscow@gmail.com"
     },
     {
-      "name" : "Everscale Guild"
+      "name": "Everscale Guild"
     }
   ],
   "license": "Apache-2.0",
@@ -50,5 +56,9 @@
     "tablemark": "^2.0.0",
     "ton-client-js": "^0.28.1",
     "underscore": "^1.13.4"
+  },
+  "devDependencies": {
+    "@everscale-actions/evernode-se": "^0.31.0",
+    "everdev": "^1.2.1"
   }
 }

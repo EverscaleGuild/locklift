@@ -1,12 +1,15 @@
 module.exports = {
   compiler: {
     // Specify path to your TON-Solidity-Compiler
-    path: '/usr/bin/solc-ton',
+    path: '~/.everdev/solidity/solc',
   },
   linker: {
     // Path to your TVM Linker
-    path: '/usr/bin/tvm_linker',
-    lib: '/usr/bin/stdlib_sol.tvm', // optional default TVM_LINKER_LIB_PATH=/usr/bin/stdlib_sol.tvm; export TVM_LINKER_LIB_PATH
+    path: '~/.everdev/solidity/tvm_linker',
+  },
+  lib: {
+    // Path to your TVM Linker
+    path: '~/.everdev/solidity/stdlib_sol.tvm',
   },
   networks: {
     // You can use TON labs graphql endpoints or local node
@@ -14,7 +17,7 @@ module.exports = {
       ton_client: {
         // See the TON client specification for all available options
         network: {
-          server_address: 'http://localhost/',
+          server_address: 'http://localhost:8080/',
         },
       },
       // This giver is default local-node giver
