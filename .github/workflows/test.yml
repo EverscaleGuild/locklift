@@ -18,7 +18,7 @@ jobs:
         platform:
           - { on: ubuntu-latest, name: linux }
           - { on: macos-latest, name: macos }
-#          - { on: windows-latest, name: windows } https://github.com/EverscaleGuild/locklift/issues/2
+          - { on: windows-latest, name: windows }
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
