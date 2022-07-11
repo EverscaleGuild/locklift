@@ -1,10 +1,9 @@
 import { Command, Option } from 'commander';
 
-import { loadConfig } from './../../config';
+import { loadConfig } from '../../config';
 import * as utils from './../utils';
 
 const program = new Command();
-
 
 program.name('gendoc')
   .description('Generate smart contracts documentation from the natspec comments')
@@ -39,7 +38,7 @@ program.name('gendoc')
     try {
       const status = builder.buildDocs();
 
-      if (status === false) {
+      if (!status) {
         process.exit(1);
       } else {
         process.exit(0);
@@ -48,6 +47,5 @@ program.name('gendoc')
       console.log(e);
     }
   });
-
 
 export default program;

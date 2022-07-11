@@ -16,13 +16,11 @@ export function checkDirEmpty(dir: fs.PathLike): fs.PathLike | boolean {
   return fs.readdirSync(dir).length === 0;
 }
 
-
 export function initializeDirIfNotExist(dir: fs.PathLike): void {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
 }
-
 
 export function flatDirTree(tree: DirectoryTree): DirectoryTree[] | undefined {
   return tree.children?.reduce((acc: DirectoryTree[], current: DirectoryTree) => {
@@ -47,7 +45,6 @@ export type ParsedDoc = {
   name: string,
   doc: any,
 }
-
 
 export class Builder {
   private options: any;

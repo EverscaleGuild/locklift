@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { Contract } from './index';
-import { CreateRunMessageParams } from '../ton';
+import { CreateRunMessageParams } from '../ever';
 
 export type RunTargetParams = Partial<CreateRunMessageParams> & {
   contract: Contract;

@@ -1,5 +1,5 @@
-import { Contract, ContractConstructorParams } from './../contract';
-import { CreateDeployMessageParams } from '../ton';
+import { Contract, ContractConstructorParams } from '../contract';
+import { CreateDeployMessageParams } from '../ever';
 import { Locklift } from '../index';
 
 

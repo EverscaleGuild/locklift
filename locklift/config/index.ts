@@ -15,7 +15,6 @@ import { libNode }from '@eversdk/lib-node';
 
 TonClient.useBinaryLibrary(libNode);
 
-
 export interface LockliftConfig {
   compiler: {
     path: string;
@@ -43,11 +42,9 @@ export interface LockliftConfig {
   }>;
 }
 
-
 const Compiler = object({
   path: defaulted(string(), () => '/usr/bin/solc-ton'),
 });
-
 
 const Linker = object({
   path: defaulted(string(), () => '/usr/bin/tvm_linker'),
@@ -74,7 +71,6 @@ const Network = object({
   giver: Giver,
   keys: Keys,
 });
-
 
 const Config = object({
   compiler: Compiler,

@@ -1,11 +1,16 @@
 import BigNumber from 'bignumber.js';
 import { Locklift } from '../index';
 import { Contract } from '../contract';
-import { TonClient, AbiContract, KeyPair, ParamsOfEncodeMessage } from '@eversdk/core';
+import {
+  TonClient as ESClient,
+  AbiContract,
+  KeyPair,
+  ParamsOfEncodeMessage,
+  ResultOfEncodeMessage,
+  ResultOfProcessMessage,
+} from '@eversdk/core';
 import { libNode } from '@eversdk/lib-node';
-
-TonClient.useBinaryLibrary(libNode);
-
+ESClient.useBinaryLibrary(libNode);
 
 export type CreateDeployMessageParams = {
   contract: Contract;
@@ -22,12 +27,12 @@ export type CreateRunMessageParams = {
 }
 
 /**
- * TON wrapper, using TonClient from TON labs SDK
+ * Ever wrapper, using ESClient from TON labs SDK
  */
-export class Ton {
+export class Ever {
   private locklift: Locklift;
   zero_address: string;
-  client: TonClient;
+  client: ESClient;
 
   /**
    * Initialize TON wrapper. All the configuration for TonClient should be placed in config.networks[network].ton_client
@@ -36,7 +41,7 @@ export class Ton {
   constructor(locklift: Locklift) {
     this.locklift = locklift;
 
-    this.client = new TonClient(this.locklift.config.networks[this.locklift.network].ton_client);
+    this.client = new ESClient(this.locklift.config.networks[this.locklift.network].ton_client);
     this.zero_address = locklift.utils.zeroAddress;
   }
 
@@ -54,7 +59,7 @@ export class Ton {
   async createDeployMessage({ contract, constructorParams, initParams, keyPair }: CreateDeployMessageParams) {
     const encodeParams = {
       abi: {
-        type: "Contract",
+        type: 'Contract',
         value: contract.abi,
       },
       deploy_set: {
@@ -99,7 +104,7 @@ export class Ton {
    */
   async createRunMessage(
     { contract, method, params, keyPair }: CreateRunMessageParams
-  ) {
+  ): Promise<ResultOfEncodeMessage> {
     const encodeParams = {
       address: contract.address,
       abi: {

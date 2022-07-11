@@ -3,12 +3,11 @@ import Mocha from 'mocha';
 import path from 'path';
 import dirTree from "directory-tree";
 
-import { loadConfig } from './../../config';
-import { Locklift } from './../../index';
+import { loadConfig } from '../../config';
+import { Locklift } from '../../index';
 import * as utils from './../utils';
 
 const program = new Command();
-
 
 program
   .name('test')
@@ -52,7 +51,7 @@ program
 
       const status = builder.buildContracts();
 
-      if (status === false) process.exit(1);
+      if (!status) process.exit(1);
     }
 
     // Initialize Locklift and pass it into tests context

@@ -6,7 +6,6 @@ import * as utils from './../utils';
 
 const program = new Command();
 
-
 program
   .name('init')
   .description('Initialize sample Locklift project in a directory')

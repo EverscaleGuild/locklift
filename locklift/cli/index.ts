@@ -8,7 +8,6 @@ import test from './commands/test';
 import run from './commands/run';
 import gendoc from './commands/gendoc';
 
-
 program.addCommand(init);
 program.addCommand(build);
 program.addCommand(test);

@@ -4,7 +4,6 @@ import * as utils from '../utils';
 
 const program = new Command();
 
-
 program
   .name('build')
   .description('Build contracts by using TON Solidity compiler and TVM linker')
@@ -26,7 +25,7 @@ program
 
     const status = builder.buildContracts();
 
-    if (status === false) process.exit(1);
+    if (!status) process.exit(1);
 
     process.exit(0);
   });

@@ -3,12 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import { Command } from 'commander';
 
-import { loadConfig } from './../../config';
-import { Locklift } from './../../index';
+import { loadConfig } from '../../config';
+import { Locklift } from '../../index';
 import * as utils from './../utils';
 
 const program = new Command();
-
 
 program
   .name('run')
@@ -51,7 +50,7 @@ program
 
       const status = builder.buildContracts();
 
-      if (status === false) process.exit(1);
+      if (!status) process.exit(1);
     }
 
     // Initialize Locklift

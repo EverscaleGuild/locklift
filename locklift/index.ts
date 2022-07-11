@@ -1,7 +1,7 @@
 import { Factory } from './factory';
 import { Giver } from './giver';
 import { Keys } from './keys';
-import { Ton } from './ton';
+import { Ever } from './ever';
 import { LockliftConfig } from './config';
 import { ValueOf } from './types';
 import * as utils from './utils';
@@ -10,7 +10,7 @@ export class Locklift {
   config: LockliftConfig;
   networkConfig: ValueOf<LockliftConfig['networks']>;
   network: keyof LockliftConfig['networks'];
-  ton!: Ton;
+  ton!: Ever;
   keys!: Keys;
   factory!: Factory;
   giver!: Giver;
@@ -24,7 +24,7 @@ export class Locklift {
   }
 
   async setup() {
-    this.ton = new Ton(this);
+    this.ton = new Ever(this);
     this.factory = new Factory(this);
     this.giver = new Giver(this);
     this.keys = new Keys(this);
